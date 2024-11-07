@@ -1,2 +1,2 @@
-# WaveLink
- s
+# discord-clone
+ wave
