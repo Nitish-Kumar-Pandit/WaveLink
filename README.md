@@ -1,7 +1,6 @@
 # WaveLink 🌊
 
-![WaveLink Banner](https://your-image-url/banner.png)
-
+![Image](https://github.com/user-attachments/assets/2c7e5761-8b8b-476b-8ed1-90d4fad9004a)
 *An intuitive and feature-rich real-time chat application.*
 
 ---
