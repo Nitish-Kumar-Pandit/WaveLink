@@ -27,20 +27,17 @@ WaveLink is a **real-time chat application** designed for seamless communication
 
 ### 🔐 Login Page
 
-![Login Page](https://your-image-url/login.png)
-
+![Image](https://github.com/user-attachments/assets/dab920f4-ff50-499a-a3c7-b347554ee049)
 *Simplistic login screen with Firebase Authentication.*
 
 ### 🏠 Dashboard
 
-![Dashboard](https://your-image-url/dashboard.png)
-
+![Image](https://github.com/user-attachments/assets/9d293370-623c-4c7f-8a4b-0e313cd951e2)
 *Clean and modern chat dashboard with conversations.*
 
 ### 💬 Real-Time Chat
 
-![Real-Time Chat](https://your-image-url/chat.png)
-
+![Image](https://github.com/user-attachments/assets/4addcc05-2395-4441-9166-f27fda421def)
 *Interactive real-time messaging interface.*
 
 ---
