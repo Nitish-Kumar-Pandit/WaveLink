@@ -139,7 +139,7 @@ function HeroSection() {
       </div>
 
       {/* Main Content */}
-      <div className="flex items-center  justify-center min-h-[90vh] sm:min-h-[80vh] md:min-h-screen px-4 sm:px-6 md:px-8 pt-16 sm:pt-20 md:pt-24 pb-4 sm:pb-8 md:pb-16 relative">
+      <div className="flex items-center justify-center min-h-[90vh] sm:min-h-[80vh] md:min-h-screen px-4 sm:px-6 md:px-8 pt-16 sm:pt-20 md:pt-24 pb-4 sm:pb-8 md:pb-16 relative">
         <div className="text-center max-w-7xl mx-auto w-full">
           {/* Subtitle */}
           <motion.div
