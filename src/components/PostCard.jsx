@@ -39,12 +39,16 @@ function PostCard({ $id, title, featuredImage, content, userId, category }) {
   const imageUrl = hasValidImageId ? appwriteService.getFilePreview(featuredImage) : null;
 
   // Debug logging for image URL (only for first few posts to avoid spam)
-  if (hasValidImageId && imageUrl && Math.random() < 0.1) {
-    console.log(`🖼️ Sample PostCard "${title?.substring(0, 30)}...":`, {
+  if (hasValidImageId && imageUrl && Math.random() < 0.2) {
+    console.log(`🖼️ PostCard Debug "${title?.substring(0, 30)}...":`, {
       featuredImage,
       imageUrl,
-      testUrl: `Test this URL manually: ${imageUrl}`
+      testUrl: `🌐 Test this URL manually: ${imageUrl}`
     });
+
+    // Also test alternative view URL
+    const viewUrl = appwriteService.getFileView(featuredImage);
+    console.log(`📄 Alternative view URL: ${viewUrl}`);
   }
 
   // If no featuredImage or empty string, treat as no image

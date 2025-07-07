@@ -65,9 +65,44 @@ This will test:
 
 ### 7. Debug Commands
 ```javascript
+// Test CORS configuration
+window.testCORS()
+
 // Test connection
 window.testAppwriteConnection()
 
-// Check specific image URL
+// Test specific image URL
+window.testImageURL('your-file-id')
+
+// Check specific image URL manually
 console.log(appwriteService.getFilePreview('your-file-id'))
 ```
+
+### 8. Step-by-Step Debugging Process
+
+1. **First, test CORS:**
+   ```javascript
+   window.testCORS()
+   ```
+
+2. **Test Appwrite connection:**
+   ```javascript
+   window.testAppwriteConnection()
+   ```
+
+3. **Upload a new image and check the console logs**
+   - Go to `/add-post`
+   - Upload an image
+   - Check console for generated URLs
+   - Test URLs manually in browser
+
+4. **If URLs don't work:**
+   - Check Appwrite Console → Storage → Your Bucket → Permissions
+   - Ensure `read("any")` permission is set
+   - Check Appwrite Console → Settings → CORS
+   - Add your frontend URL
+
+5. **Test specific file:**
+   ```javascript
+   window.testImageURL('file-id-from-console')
+   ```

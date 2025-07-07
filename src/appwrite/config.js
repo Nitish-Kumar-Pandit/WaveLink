@@ -152,8 +152,9 @@ export class Service {
         ID.unique(),
         file,
         [
-          Permission.read(Role.any()), // Public read access
-          Permission.write(Role.any()) // Public write access (optional)
+          Permission.read(Role.any()), // ✅ CRITICAL: Public read access for image display
+          Permission.update(Role.any()), // Allow updates if needed
+          Permission.delete(Role.any())  // Allow deletion if needed
         ]
       );
 
@@ -163,6 +164,11 @@ export class Service {
       // Test the preview URL immediately after upload
       const previewUrl = this.getFilePreview(response.$id);
       console.log("🖼️ Generated preview URL:", previewUrl);
+      console.log("🌐 Test this URL manually in browser:", previewUrl);
+
+      // Also test getFileView as alternative
+      const viewUrl = this.getFileView(response.$id);
+      console.log("📄 Alternative view URL:", viewUrl);
 
       return response;
     } catch (error) {
@@ -222,12 +228,40 @@ export class Service {
       }
     }
   }
+
+  // Alternative method to get direct file view URL
+  getFileView(fileId) {
+    if (!fileId) {
+      return null;
+    }
+
+    try {
+      const viewUrl = this.bucket.getFileView(conf.appwriteBucketId, fileId);
+      return viewUrl.href || viewUrl.toString();
+    } catch (error) {
+      console.error("❌ Failed to generate file view URL for fileId:", fileId);
+      return null;
+    }
+  }
 }
 
 const service = new Service();
 
-// Add global test function for debugging
+// Add global test functions for debugging
 if (typeof window !== 'undefined') {
+  // Test CORS configuration
+  window.testCORS = () => {
+    console.log("🌐 CORS Configuration Check:");
+    console.log("📋 Current frontend URL:", window.location.origin);
+    console.log("🔧 Add this URL to Appwrite Console → Settings → CORS:");
+    console.log("   ", window.location.origin);
+    console.log("📝 Also add these common development URLs:");
+    console.log("   http://localhost:5173");
+    console.log("   http://localhost:3000");
+    console.log("   http://127.0.0.1:5173");
+    console.log("🚨 If images fail to load, this is likely a CORS issue!");
+  };
+
   window.testAppwriteConnection = async () => {
     console.log("🧪 Testing Appwrite Connection...");
     console.log("📋 Configuration:", {
@@ -277,6 +311,34 @@ if (typeof window !== 'undefined') {
     } catch (error) {
       console.error("❌ Appwrite connection test failed:", error);
       return false;
+    }
+  };
+
+  // Test specific image URL
+  window.testImageURL = (fileId) => {
+    if (!fileId) {
+      console.log("❌ Please provide a file ID: window.testImageURL('your-file-id')");
+      return;
+    }
+
+    console.log("🖼️ Testing image URL for file ID:", fileId);
+
+    const previewUrl = service.getFilePreview(fileId);
+    const viewUrl = service.getFileView(fileId);
+
+    console.log("📋 Generated URLs:");
+    console.log("   Preview URL:", previewUrl);
+    console.log("   View URL:", viewUrl);
+    console.log("🌐 Test these URLs manually:");
+    console.log("   Preview:", previewUrl);
+    console.log("   View:", viewUrl);
+
+    // Try to load the image programmatically
+    if (previewUrl) {
+      const img = new Image();
+      img.onload = () => console.log("✅ Preview URL loads successfully!");
+      img.onerror = () => console.error("❌ Preview URL failed to load - check permissions/CORS");
+      img.src = previewUrl;
     }
   };
 }

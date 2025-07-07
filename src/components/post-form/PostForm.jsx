@@ -110,6 +110,7 @@ export default function PostForm({ post }) {
     setIsSubmitting(true);
 
     try {
+
       const file = data.image?.[0]
         ? await appwriteService.uploadFile(data.image[0])
         : null;
