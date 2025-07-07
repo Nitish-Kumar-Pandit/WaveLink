@@ -91,7 +91,7 @@ function About() {
     {
       year: "2020",
       title: "The Beginning",
-      description: "ByteCraft was founded with a simple mission: make writing accessible to everyone.",
+      description: "WaveLink was founded with a simple mission: make writing accessible to everyone.",
       icon: <LightBulbIcon className="w-6 h-6" />
     },
     {
@@ -153,7 +153,11 @@ function About() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-black font-bold text-sm sm:text-base md:text-lg tracking-wide"
+            className="text-black font-bold text-sm sm:text-base md:text-lg tracking-wide cursor-pointer hover:opacity-70 transition-opacity"
+            onClick={() => {
+              window.scrollTo(0, 0);
+              window.location.href = '/';
+            }}
           >
             WAVELINK
           </motion.div>
@@ -290,7 +294,7 @@ function About() {
               </p>
               <div className="space-y-6 text-gray-600 leading-relaxed font-medium">
                 <p>
-                  At ByteCraft, we believe that everyone has a story worth telling. 
+                  At WaveLink, we believe that everyone has a story worth telling. 
                   Our platform breaks down the barriers between writers and readers, 
                   creating a space where creativity flourishes and communities thrive.
                 </p>

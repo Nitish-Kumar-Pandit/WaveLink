@@ -19,11 +19,16 @@ export class AuthService {
 // }); can not do this as because of this we have to provide account.create manually and we have to expose this to register component which is a issue as because of this business logic is mixing with ui logic
 
   constructor() {
-    this.client
-      .setEndpoint(conf.appwriteUrl)
-      .setProject(conf.appwriteProjectId);
-    this.account = new Account(this.client);
-  }  
+    try {
+      this.client
+        .setEndpoint(conf.appwriteUrl)
+        .setProject(conf.appwriteProjectId);
+      this.account = new Account(this.client);
+    } catch (error) {
+      console.error("Failed to initialize Appwrite auth client:", error);
+      throw new Error("Appwrite authentication configuration error. Please check your environment variables.");
+    }
+  }
 
   //we want only the the obj is created when the class is called
   //incase venderlock occour we can switch to another service

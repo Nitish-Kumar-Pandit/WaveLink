@@ -32,7 +32,7 @@ const LoadingScreen = ({ message = "Loading..." }) => {
           transition={{ delay: 0.2 }}
           className="text-2xl font-display font-bold text-gray-900 mb-4"
         >
-          ByteCraft
+          WaveLink
         </motion.h2>
         
         <motion.p

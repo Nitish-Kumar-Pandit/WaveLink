@@ -5,6 +5,151 @@
 @tailwind components;
 @tailwind utilities;
 
+/* TinyMCE Mobile Responsive Styles */
+@media (max-width: 768px) {
+  /* Mobile TinyMCE Container */
+  .tox-tinymce {
+    border-radius: 8px !important;
+    border: 2px solid #e5e7eb !important;
+  }
+
+  /* Mobile Toolbar */
+  .tox-toolbar {
+    flex-wrap: wrap !important;
+    padding: 8px !important;
+    gap: 4px !important;
+  }
+
+  .tox-toolbar__group {
+    margin: 2px !important;
+  }
+
+  /* Mobile Toolbar Buttons */
+  .tox-tbtn {
+    width: 36px !important;
+    height: 36px !important;
+    margin: 1px !important;
+    border-radius: 6px !important;
+  }
+
+  .tox-tbtn svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+  /* Mobile Editor Content Area */
+  .tox-edit-area {
+    border-radius: 0 0 8px 8px !important;
+  }
+
+  .tox-edit-area iframe {
+    min-height: 300px !important;
+  }
+
+  /* Mobile Menubar (hidden) */
+  .tox-menubar {
+    display: none !important;
+  }
+
+  /* Mobile Status Bar */
+  .tox-statusbar {
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+  }
+
+  /* Mobile Dropdown Menus */
+  .tox-collection {
+    max-height: 200px !important;
+    overflow-y: auto !important;
+  }
+
+  /* Mobile Dialog Boxes */
+  .tox-dialog {
+    max-width: 95vw !important;
+    max-height: 90vh !important;
+    margin: 5vh auto !important;
+  }
+
+  .tox-dialog__body {
+    padding: 12px !important;
+  }
+
+  /* Mobile Form Fields in Dialogs */
+  .tox-dialog .tox-textfield,
+  .tox-dialog .tox-textarea {
+    font-size: 16px !important; /* Prevents zoom on iOS */
+    padding: 12px !important;
+  }
+
+  /* Mobile Quick Toolbar */
+  .tox-pop {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    border-radius: 8px !important;
+  }
+
+  .tox-pop .tox-toolbar {
+    padding: 6px !important;
+  }
+
+  /* Mobile Color Picker */
+  .tox-swatches {
+    grid-template-columns: repeat(6, 1fr) !important;
+  }
+
+  /* Mobile Table Tools */
+  .tox-toolbar--scrolling {
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
+  .tox-toolbar--scrolling::-webkit-scrollbar {
+    display: none !important;
+  }
+}
+
+/* Tablet Responsive Styles */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .tox-toolbar {
+    flex-wrap: wrap !important;
+    padding: 10px !important;
+  }
+
+  .tox-tbtn {
+    width: 32px !important;
+    height: 32px !important;
+    margin: 2px !important;
+  }
+
+  .tox-edit-area iframe {
+    min-height: 400px !important;
+  }
+}
+
+/* Touch-friendly improvements for all devices */
+.tox-tbtn:hover,
+.tox-tbtn:focus {
+  background-color: #f3f4f6 !important;
+  border-color: #f97316 !important;
+}
+
+.tox-tbtn--enabled {
+  background-color: #fed7aa !important;
+  border-color: #f97316 !important;
+}
+
+/* Custom scrollbar for content area */
+.tox-edit-area iframe {
+  scrollbar-width: thin !important;
+  scrollbar-color: #f97316 #f3f4f6 !important;
+}
+
+/* Focus styles for accessibility */
+.tox-tinymce:focus-within {
+  border-color: #f97316 !important;
+  box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1) !important;
+}
+
 /* Modern Design System Variables */
 :root {
   /* Primary Colors */

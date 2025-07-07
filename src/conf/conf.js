@@ -7,7 +7,24 @@ const conf = {
   tinymceAPI: String(import.meta.env.VITE_TINYMCE_API_KEY),
 };
 
-//import statements in app.jsx sai kbhi kbhi variable load ni hote access ni hote and fer app crash ho jaati hai
+// Validate required environment variables
+const requiredEnvVars = [
+  'VITE_APPWRITE_URL',
+  'VITE_APPWRITE_PROJECT_ID',
+  'VITE_APPWRITE_DATABASE_ID',
+  'VITE_APPWRITE_COLLECTION_ID',
+  'VITE_APPWRITE_BUCKET_ID'
+];
+
+const missingVars = requiredEnvVars.filter(varName =>
+  !import.meta.env[varName] || import.meta.env[varName] === 'undefined'
+);
+
+if (missingVars.length > 0) {
+  console.error('Missing required environment variables:', missingVars);
+  console.error('Please check your .env file and ensure all required variables are set.');
+  console.error('See APPWRITE_SETUP.md for setup instructions.');
+}
 
 export default conf;
 

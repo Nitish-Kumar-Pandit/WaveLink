@@ -9,7 +9,8 @@ import {
   UserIcon,
   DocumentTextIcon,
   Bars3Icon,
-  XMarkIcon
+  XMarkIcon,
+  FolderIcon
 } from "@heroicons/react/24/outline";
 import "remixicon/fonts/remixicon.css";
 
@@ -47,6 +48,12 @@ function Header() {
       slug: "/all-posts",
       active: true,
     },
+    ...(authStatus ? [{
+      name: "My Posts",
+      icon: <FolderIcon className="w-5 h-5" />,
+      slug: "/my-posts",
+      active: true,
+    }] : []),
   ];
 
   return (
@@ -73,7 +80,7 @@ function Header() {
             <Link to="/" className="flex items-center space-x-2">
               <Logo width="50px" />
               <span className="text-2xl font-display font-bold bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">
-                ByteCraft
+                WaveLink
               </span>
             </Link>
           </motion.div>

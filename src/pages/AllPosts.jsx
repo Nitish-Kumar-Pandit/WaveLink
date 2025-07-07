@@ -13,8 +13,12 @@ import {
   FunnelIcon,
   Squares2X2Icon,
   ListBulletIcon,
-  AdjustmentsHorizontalIcon
+  AdjustmentsHorizontalIcon,
+  PlusIcon,
+  ArrowPathIcon,
+  BookmarkIcon
 } from "@heroicons/react/24/outline";
+import { calculateReadingTime, getViewCount, getPreviewText, formatDate } from "../utils/postUtils";
 
 function AllPosts() {
   const [posts, setPosts] = useState([]);
@@ -26,12 +30,24 @@ function AllPosts() {
   const [viewMode, setViewMode] = useState("grid"); // grid or list
   const [showFilters, setShowFilters] = useState(false);
 
+  // Scroll to top on component mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   const categories = [
-    { value: "all", label: "All Posts" },
-    { value: "technology", label: "Technology" },
-    { value: "design", label: "Design" },
-    { value: "lifestyle", label: "Lifestyle" },
-    { value: "business", label: "Business" }
+    { value: "all", label: "All Posts" }
+    // Note: Category filtering temporarily disabled due to database schema limitations
+    // { value: "general", label: "General" },
+    // { value: "technology", label: "Technology" },
+    // { value: "design", label: "Design" },
+    // { value: "lifestyle", label: "Lifestyle" },
+    // { value: "business", label: "Business" },
+    // { value: "travel", label: "Travel" },
+    // { value: "food", label: "Food & Cooking" },
+    // { value: "health", label: "Health & Fitness" },
+    // { value: "education", label: "Education" },
+    // { value: "entertainment", label: "Entertainment" }
   ];
 
   const sortOptions = [
@@ -41,22 +57,44 @@ function AllPosts() {
     { value: "title", label: "Alphabetical" }
   ];
 
+  const fetchPosts = async () => {
+    try {
+      setLoading(true);
+      const response = await appwriteService.getPosts([]);
+      if (response) {
+        setPosts(response.documents);
+        setFilteredPosts(response.documents);
+      }
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await appwriteService.getPosts([]);
-        if (response) {
-          setPosts(response.documents);
-          setFilteredPosts(response.documents);
-        }
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-      } finally {
-        setLoading(false);
+    fetchPosts();
+  }, []);
+
+  // Refetch posts when the page becomes visible (user navigates back)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        fetchPosts();
       }
     };
 
-    fetchPosts();
+    const handleFocus = () => {
+      fetchPosts();
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('focus', handleFocus);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('focus', handleFocus);
+    };
   }, []);
 
   // Filter and sort posts
@@ -71,16 +109,13 @@ function AllPosts() {
       );
     }
 
-    // Category filter
-    if (selectedCategory !== "all") {
-      // For demo purposes, we'll randomly assign categories
-      // In a real app, you'd have category data in your posts
-      filtered = filtered.filter((_, index) => {
-        const categories = ["technology", "design", "lifestyle", "business"];
-        const postCategory = categories[index % categories.length];
-        return postCategory === selectedCategory;
-      });
-    }
+    // Category filter (temporarily disabled due to database schema limitations)
+    // if (selectedCategory !== "all") {
+    //   filtered = filtered.filter(post =>
+    //     post.category === selectedCategory ||
+    //     (!post.category && selectedCategory === "general")
+    //   );
+    // }
 
     // Sort posts
     filtered.sort((a, b) => {
@@ -130,9 +165,31 @@ function AllPosts() {
   }
 
   return (
-    <div className="min-h-screen bg-white py-16">
-      <Container>
-        {/* Header */}
+    <div className="min-h-screen bg-white">
+      {/* Navigation */}
+      <nav className="absolute top-0 left-0 right-0 z-50 p-4 sm:p-6 md:p-8">
+        <div className="flex justify-between items-start">
+          {/* Logo */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-black font-bold text-sm sm:text-base md:text-lg tracking-wide cursor-pointer hover:opacity-70 transition-opacity"
+            onClick={() => {
+              window.scrollTo(0, 0);
+              window.location.href = '/';
+            }}
+          >
+            WAVELINK
+          </motion.div>
+
+
+        </div>
+      </nav>
+
+      <div className="pt-16">
+        <Container>
+          {/* Header */}
         <div className="text-center mb-12">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -145,10 +202,27 @@ function AllPosts() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-gray-600 font-medium tracking-wide"
+            className="text-gray-600 font-medium tracking-wide mb-6"
           >
             DISCOVER {posts.length} AMAZING STORIES FROM OUR COMMUNITY
           </motion.p>
+
+          {/* Create Post Button */}
+          <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            onClick={() => {
+              window.scrollTo(0, 0);
+              window.location.href = '/add-post';
+            }}
+            className="inline-flex items-center px-6 py-3 bg-orange-500 text-white rounded-full font-semibold text-sm tracking-wide hover:bg-orange-600 transition-all duration-300 transform hover:scale-105"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <PlusIcon className="w-5 h-5 mr-2" />
+            CREATE NEW STORY
+          </motion.button>
         </div>
 
         {/* Search and Filters */}
@@ -162,37 +236,49 @@ function AllPosts() {
                 placeholder="SEARCH STORIES..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-full focus:outline-none focus:border-orange-500 transition-all font-medium tracking-wide placeholder-gray-400"
+                className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-full focus:outline-none focus:border-orange-500 transition-all font-medium tracking-wide placeholder-gray-500 text-gray-900 bg-white"
               />
             </div>
 
             {/* Filter Controls */}
             <div className="flex items-center space-x-4">
-              {/* Category Filter */}
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="px-4 py-2 border-2 border-gray-200 rounded-full focus:outline-none focus:border-orange-500 font-medium tracking-wide"
-              >
-                {categories.map(category => (
-                  <option key={category.value} value={category.value}>
-                    {category.label}
-                  </option>
-                ))}
-              </select>
+              {/* Category Filter - Temporarily hidden due to database schema limitations */}
+              {false && (
+                <select
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                  className="px-4 py-2 border-2 border-gray-200 rounded-full focus:outline-none focus:border-orange-500 font-medium tracking-wide text-gray-900 bg-white"
+                >
+                  {categories.map(category => (
+                    <option key={category.value} value={category.value} className="text-gray-900 bg-white">
+                      {category.label}
+                    </option>
+                  ))}
+                </select>
+              )}
 
               {/* Sort Filter */}
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="px-4 py-2 border-2 border-gray-200 rounded-full focus:outline-none focus:border-orange-500 font-medium tracking-wide"
+                className="px-4 py-2 border-2 border-gray-200 rounded-full focus:outline-none focus:border-orange-500 font-medium tracking-wide text-gray-900 bg-white"
               >
                 {sortOptions.map(option => (
-                  <option key={option.value} value={option.value}>
+                  <option key={option.value} value={option.value} className="text-gray-900 bg-white">
                     {option.label}
                   </option>
                 ))}
               </select>
+
+              {/* Refresh Button */}
+              <button
+                onClick={fetchPosts}
+                disabled={loading}
+                className="p-3 border-2 border-gray-200 rounded-full bg-white text-gray-600 hover:bg-gray-50 hover:text-orange-500 transition-colors disabled:opacity-50"
+                title="Refresh posts"
+              >
+                <ArrowPathIcon className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
+              </button>
 
               {/* View Mode Toggle */}
               <div className="flex border-2 border-gray-200 rounded-full overflow-hidden">
@@ -214,10 +300,9 @@ function AllPosts() {
 
           {/* Results Count */}
           <div className="mt-4 pt-4 border-t border-gray-200">
-            <p className="text-sm text-gray-600 font-medium tracking-wide">
+            <p className="text-sm text-gray-800 font-semibold tracking-wide">
               SHOWING {filteredPosts.length} OF {posts.length} STORIES
               {searchTerm && ` FOR "${searchTerm.toUpperCase()}"`}
-              {selectedCategory !== "all" && ` IN ${categories.find(c => c.value === selectedCategory)?.label.toUpperCase()}`}
             </p>
           </div>
         </div>
@@ -236,7 +321,7 @@ function AllPosts() {
               <h3 className="text-2xl font-bold text-gray-900 mb-4">
                 No stories found
               </h3>
-              <p className="text-gray-600 mb-8">
+              <p className="text-gray-700 mb-8 font-medium">
                 {searchTerm
                   ? `No stories match "${searchTerm}". Try adjusting your search terms.`
                   : "No stories available in this category."
@@ -246,11 +331,11 @@ function AllPosts() {
                 <button
                   onClick={() => {
                     setSearchTerm("");
-                    setSelectedCategory("all");
+                    setSortBy("newest");
                   }}
-                  className="px-6 py-3 bg-primary-500 text-white rounded-xl hover:bg-primary-600 transition-colors"
+                  className="px-6 py-3 bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition-colors font-medium tracking-wide"
                 >
-                  Clear Filters
+                  Clear Search
                 </button>
               )}
             </motion.div>
@@ -279,11 +364,33 @@ function AllPosts() {
                     <GlassCard className="bg-white/80 hover:bg-white/90 transition-all duration-300">
                       <div className="flex gap-6">
                         <div className="w-48 h-32 flex-shrink-0">
-                          <img
-                            src={appwriteService.getFilePreview(post.featuredImage)}
-                            alt={post.title}
-                            className="w-full h-full object-cover rounded-xl"
-                          />
+                          {post.featuredImage &&
+                           typeof post.featuredImage === 'string' &&
+                           post.featuredImage.trim().length > 0 &&
+                           post.featuredImage !== 'null' &&
+                           post.featuredImage !== 'undefined' ? (
+                            <img
+                              src={appwriteService.getFilePreview(post.featuredImage)}
+                              alt={post.title}
+                              className="w-full h-full object-cover rounded-xl"
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                                e.target.nextElementSibling.style.display = 'flex';
+                              }}
+                            />
+                          ) : null}
+                          <div className={`w-full h-full bg-gradient-to-br from-orange-100 to-orange-200 rounded-xl flex items-center justify-center ${
+                            post.featuredImage &&
+                            typeof post.featuredImage === 'string' &&
+                            post.featuredImage.trim().length > 0 &&
+                            post.featuredImage !== 'null' &&
+                            post.featuredImage !== 'undefined' ? 'hidden' : ''
+                          }`}>
+                            <div className="text-center">
+                              <BookmarkIcon className="w-8 h-8 text-orange-400 mx-auto mb-1" />
+                              <p className="text-orange-600 font-medium text-xs">No Image</p>
+                            </div>
+                          </div>
                         </div>
                         <div className="flex-1 flex flex-col justify-between">
                           <div>
@@ -291,15 +398,15 @@ function AllPosts() {
                               <a href={`/post/${post.$id}`}>{post.title}</a>
                             </h3>
                             <p className="text-gray-600 text-sm line-clamp-2 mb-4">
-                              {post.content ? post.content.replace(/<[^>]*>/g, '').substring(0, 150) + '...' : 'No preview available...'}
+                              {getPreviewText(post.content, 150)}
                             </p>
                           </div>
                           <div className="flex items-center justify-between text-sm text-gray-500">
                             <div className="flex items-center space-x-4">
-                              <span>5 min read</span>
-                              <span>{Math.floor(Math.random() * 1000) + 100} views</span>
+                              <span>{calculateReadingTime(post.content)} min read</span>
+                              <span>{getViewCount(post.$id)} views</span>
                             </div>
-                            <span>{new Date(post.$createdAt).toLocaleDateString()}</span>
+                            <span>{formatDate(post.$createdAt)}</span>
                           </div>
                         </div>
                       </div>
@@ -324,7 +431,8 @@ function AllPosts() {
             </button>
           </motion.div>
         )}
-      </Container>
+        </Container>
+      </div>
     </div>
   );
 }

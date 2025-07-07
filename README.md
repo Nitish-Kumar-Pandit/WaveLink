@@ -1,179 +1,175 @@
-<<<<<<< HEAD
-# ByteCraft - Blog Application
+# WaveLink - Modern Blog Platform 🌊
 
-ByteCraft is a SaaS application that allows users to create and read blog posts. Built using React with Vite for the front-end and Appwrite for the back-end, the app includes user authentication features such as sign-up and login to ensure secure access to content.
-
-## Features
-
-- **User Authentication**: Secure sign-up and login functionality to ensure user-specific content access.
-- **Create and Read Blogs**: Users can create blog posts and read existing posts after logging in.
-- **Rich Text Editing**: Create engaging blog content using a rich text editor powered by TinyMCE.
-- **Responsive Design**: Optimized UI/UX for seamless usage across devices.
-
----
-
-## Built With
-
-### Frontend
-
-- **Framework**: [React](https://reactjs.org/) (built with [Vite](https://vitejs.dev/))
-- **State Management**: [@reduxjs/toolkit](https://redux-toolkit.js.org/)
-- **Routing**: [react-router-dom](https://reactrouter.com/en/main)
-- **Form Handling**: [react-hook-form](https://react-hook-form.com/)
-- **Rich Text Editor**: [@tinymce/tinymce-react](https://github.com/tinymce/tinymce-react)
-- **Icons**: [Heroicons](https://heroicons.com/)
-- **HTML Parsing**: [html-react-parser](https://www.npmjs.com/package/html-react-parser)
-
-### Backend
-
-- **BaaS**: [Appwrite](https://appwrite.io/) for authentication, database, and API management.
-
----
-
-## Installation
-
-To set up the ByteCraft project locally, follow these steps:
-
-### Prerequisites
-
-- [Node.js](https://nodejs.org/) (v16 or later)
-- [Appwrite](https://appwrite.io/) server configured
-- Package Manager: npm or yarn
-
-### Steps
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/rajput-vishal01/bytecraft.git
-   cd bytecraft
-   ```
-
-2. Install dependencies:
-
-   ```bash
-   npm install
-   ```
-
-3. Configure Appwrite:
-
-   - Create a new Appwrite project.
-   - Set up authentication and database collections for blog posts and users.
-   - Update the Appwrite project ID, endpoint, and API key in the code.
-   - Setup your .env file.
-
-4. Start the development server:
-
-   ```bash
-   npm run dev
-   ```
-
----
-
-## Usage
-
-### Sign Up/Login
-
-Users must create an account or log in to access the app.
-
-### Create Blogs
-
-After logging in, users can access the blog editor to create rich text posts.
-
-### Read Blogs
-
-Browse and read blog posts created by other users.
-
----
-
-## Credits
-
-All the learning in this repository is heavily inspired by **Hitesh Choudhary**, also known as **Chai aur Code**.
-
-Check out his amazing content:
-[Chai aur Code on YouTube](https://www.youtube.com/c/HiteshChoudharydotcom)
-
----
-
-## Contributing
-
-Contributions are welcome! If you'd like to improve this project, please fork the repository and submit a pull request.
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
----
-
-## Contact
-
-Feel free to reach out if you have any questions!
-
-- **GitHub**: [rajput-vishal01](https://github.com/rajput-vishal01)
-- **Email**: [askvishal.me@gmail.com](mailto:askvishal.me@gmail.com)
-
-Project Link: [https://github.com/rajput-vishal01/bytecraft](https://github.com/rajput-vishal01/bytecraft)
-=======
-# WaveLink 🌊
-
-![Image](https://github.com/user-attachments/assets/2c7e5761-8b8b-476b-8ed1-90d4fad9004a)
-*An intuitive and feature-rich real-time chat application.*
-
----
-
-## 📝 Overview
-
-WaveLink is a **real-time chat application** designed for seamless communication. It enables users to connect, share messages, and experience a clean, Discord-like user interface tailored for modern communication needs.
-
----
+A modern, responsive blog platform built with React, Vite, and Appwrite. Features a clean design inspired by Discord's UI with glassmorphism effects and smooth animations.
 
 ## 🚀 Features
 
-- 🔒 **Secure Authentication**: Login using Firebase Authentication.
-- 💬 **Real-time Messaging**: Powered by WebSockets for instant communication.
-- 🎨 **Customizable Themes**: Light and dark modes for an enhanced user experience.
-- 📂 **File Sharing**: Share images, videos, and documents in conversations.
-- 🔔 **Notifications**: Get notified about new messages in real-time.
-- 👥 **Group Chats**: Create and manage group chats easily.
-
----
-
-## 📸 Screenshots
-
-### 🔐 Login Page
-
-![Image](https://github.com/user-attachments/assets/dab920f4-ff50-499a-a3c7-b347554ee049)
-*Simplistic login screen with Firebase Authentication.*
-
-### 🏠 Dashboard
-
-![Image](https://github.com/user-attachments/assets/9d293370-623c-4c7f-8a4b-0e313cd951e2)
-*Clean and modern chat dashboard with conversations.*
-
-### 💬 Real-Time Chat
-
-![Image](https://github.com/user-attachments/assets/4addcc05-2395-4441-9166-f27fda421def)
-*Interactive real-time messaging interface.*
-
----
+- **Modern UI/UX**: Discord-inspired dark theme with glassmorphism effects
+- **Authentication**: Secure user registration and login with Appwrite
+- **Blog Management**: Create, edit, delete, and manage blog posts
+- **Rich Text Editor**: TinyMCE integration for rich content creation
+- **File Upload**: Image upload and management with Appwrite Storage
+- **Responsive Design**: Mobile-first design with Tailwind CSS
+- **Smooth Animations**: Framer Motion animations and AOS effects
+- **State Management**: Redux Toolkit for efficient state management
+- **Routing**: React Router for seamless navigation
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: React.js, Redux, Tailwind CSS
-- **Backend**: Node.js, Express.js
-- **Database**: Firebase Firestore
-- **Real-Time Communication**: Firebase Realtime Database or WebSockets
-- **Authentication**: Firebase Authentication
+- **Frontend**: React 18, Vite, Tailwind CSS
+- **Backend**: Appwrite (BaaS)
+- **State Management**: Redux Toolkit
+- **Animations**: Framer Motion, AOS
+- **Rich Text**: TinyMCE
+- **Icons**: Heroicons, Lucide React, Remix Icons
+- **Forms**: React Hook Form
 
----
+## 📋 Prerequisites
+
+- Node.js (v16 or higher)
+- npm or bun
+- Appwrite account (cloud or self-hosted)
 
 ## 🔧 Installation
 
-1. **Clone the repository**:
-
+1. **Clone the repository**
    ```bash
-   git clone https://github.com/Nitish-Kumar-Pandit/WaveLink.git
+   git clone <repository-url>
    cd WaveLink
->>>>>>> 8f095179bec1652ab0ab6f6e13ca10b68d44d3ad
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   # or
+   bun install
+   ```
+
+3. **Set up environment variables**
+   ```bash
+   cp .env.example .env
+   ```
+
+   Update the `.env` file with your Appwrite configuration:
+   ```env
+   VITE_APPWRITE_URL=https://cloud.appwrite.io/v1
+   VITE_APPWRITE_PROJECT_ID=your_project_id
+   VITE_APPWRITE_DATABASE_ID=your_database_id
+   VITE_APPWRITE_COLLECTION_ID=your_collection_id
+   VITE_APPWRITE_BUCKET_ID=your_bucket_id
+   VITE_TINYMCE_API_KEY=your_tinymce_api_key
+   ```
+
+4. **Configure Appwrite**
+
+   Follow the detailed setup guide in `APPWRITE_SETUP.md`
+
+5. **Start the development server**
+   ```bash
+   npm run dev
+   # or
+   bun dev
+   ```
+
+## 🔧 Appwrite Configuration
+
+### Quick Setup Checklist:
+
+1. ✅ Create Appwrite project
+2. ✅ Add web platform (localhost:5173)
+3. ✅ Create database
+4. ✅ Create posts collection with attributes:
+   - `title` (String, required)
+   - `content` (String, required)
+   - `featuredImage` (String, optional)
+   - `status` (String, required)
+   - `userId` (String, required)
+5. ✅ Create storage bucket for images
+6. ✅ Enable email/password authentication
+7. ✅ Update environment variables
+
+For detailed instructions, see `APPWRITE_SETUP.md`
+
+## 🧪 Testing the Setup
+
+After configuration, you can test your Appwrite connection:
+
+1. Open the browser console in development mode
+2. Run: `window.testAppwriteConnection()`
+3. Check the results for any configuration issues
+
+## 📁 Project Structure
+
+```
+src/
+├── components/          # Reusable UI components
+├── pages/              # Page components
+├── appwrite/           # Appwrite service configurations
+│   ├── auth.js         # Authentication service
+│   └── config.js       # Database and storage service
+├── conf/               # Configuration files
+├── store/              # Redux store and slices
+├── contexts/           # React contexts
+├── hooks/              # Custom hooks
+├── utils/              # Utility functions
+└── main.jsx           # Application entry point
+```
+
+## 🎨 Design System
+
+- **Colors**: Discord-inspired dark theme (#36393f, #2f3136)
+- **Accents**: WaveLink blue (#3b82f6)
+- **Typography**: Modern, clean fonts
+- **Effects**: Glassmorphism, smooth transitions
+- **Layout**: Three-panel layout with responsive design
+
+## 🚀 Available Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
+
+## 🔐 Environment Variables
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `VITE_APPWRITE_URL` | Appwrite endpoint URL | Yes |
+| `VITE_APPWRITE_PROJECT_ID` | Appwrite project ID | Yes |
+| `VITE_APPWRITE_DATABASE_ID` | Database ID | Yes |
+| `VITE_APPWRITE_COLLECTION_ID` | Posts collection ID | Yes |
+| `VITE_APPWRITE_BUCKET_ID` | Storage bucket ID | Yes |
+| `VITE_TINYMCE_API_KEY` | TinyMCE API key | Optional |
+
+## 🐛 Troubleshooting
+
+### Common Issues:
+
+1. **CORS Errors**: Ensure your domain is added to Appwrite platform settings
+2. **Environment Variables**: Restart dev server after updating `.env`
+3. **Permission Errors**: Check Appwrite collection and bucket permissions
+4. **Build Errors**: Ensure all required environment variables are set
+
+### Debug Tools:
+
+- Use `window.testAppwriteConnection()` in browser console
+- Check browser network tab for API calls
+- Review Appwrite console logs
+
+## 📝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly
+5. Submit a pull request
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+## 🙏 Acknowledgments
+
+- Appwrite for the excellent BaaS platform
+- Discord for UI/UX inspiration
+- The React and Vite communities

@@ -7,7 +7,7 @@ function Select({ options, label, className, ...props }, ref) {
       {label && (
         <label
           htmlFor={id}
-          className="block mb-2 text-sm font-medium text-dark" 
+          className="inline-block mb-1 pl-1 text-sm font-medium text-gray-900"
         >
           {label}
         </label>
@@ -16,15 +16,15 @@ function Select({ options, label, className, ...props }, ref) {
         {...props}
         id={id}
         ref={ref}
-        className={`px-4 py-2 rounded-lg bg-off-white text-dark outline-none 
-          focus:bg-soft-white focus:ring-2 focus:ring-light-gray focus:border-light-gray 
-          duration-200 border border-light-gray w-full shadow-sm 
-          hover:shadow-md hover:bg-light-gray ${className}`}>
-        
+        className={`px-4 py-2 rounded-lg bg-white text-gray-900 outline-none
+          focus:ring-2 focus:ring-orange-500 focus:border-orange-500
+          duration-200 border-2 border-gray-200 w-full shadow-sm
+          hover:border-gray-300 font-medium tracking-wide ${className}`}>
+
           {/* By default we are taking arrays as options */}
         {/* checking that the given array is not empty else confirm error = ? */}
         {options?.map((option) => (
-          <option key={option} value={option}>
+          <option key={option} value={option} className="text-gray-900 bg-white">
             {option}
           </option>
         ))}

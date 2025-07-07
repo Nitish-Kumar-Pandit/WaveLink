@@ -14,6 +14,8 @@ import AuthLayout from "./AuthLayout";
 import Input from "./Input";
 import PageTransition from "./PageTransition";
 import LoadingScreen from "./LoadingScreen";
+import AppwritePingTest from "./AppwritePingTest";
+import ConfirmationModal from "./ConfirmationModal";
 
 // Modern UI Components
 export * from "./ui";
@@ -35,4 +37,6 @@ export {
   Select,
   PageTransition,
   LoadingScreen,
+  AppwritePingTest,
+  ConfirmationModal,
 };

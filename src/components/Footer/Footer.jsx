@@ -75,10 +75,10 @@ function Footer() {
                   <span className="text-sm font-medium tracking-wide">hello@wavelink.com</span>
                 </div>
                 <div className="flex items-center text-gray-500">
-                  <span className="text-sm font-medium tracking-wide">San Francisco, CA</span>
+Haryana, India
                 </div>
                 <div className="flex items-center text-gray-500">
-                  <span className="text-sm font-medium tracking-wide">+1 (555) 123-4567</span>
+                  <span className="text-sm font-medium tracking-wide">+91 99X 1X3-4XX7</span>
                 </div>
               </div>
             </motion.div>

@@ -3,19 +3,17 @@ import { motion } from "framer-motion";
 import appwriteService from "../appwrite/config";
 import {
   Container,
-  PostCard,
-  GlassCard
+  PostCard
 } from "../components";
 import HeroSection from "../components/HeroSection";
+
 import {
   ArrowRightIcon,
   CodeBracketIcon,
   PaintBrushIcon,
   HeartIcon,
   BriefcaseIcon,
-  UserGroupIcon,
-  ClockIcon,
-  EyeIcon
+  UserGroupIcon
 } from "@heroicons/react/24/outline";
 
 function Home() {
@@ -85,6 +83,8 @@ function Home() {
       {/* Hero Section */}
       <HeroSection />
 
+
+
       {/* Featured Posts Section */}
       <section className="py-20 bg-white border-t border-gray-200">
         <Container>
@@ -118,12 +118,27 @@ function Home() {
           </div>
 
           {loading ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
               {[...Array(6)].map((_, i) => (
-                <div key={i} className="animate-pulse">
-                  <div className="bg-gray-200 h-48 rounded-2xl mb-4"></div>
-                  <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-                  <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                <div key={i} className="animate-pulse bg-white border border-gray-200 overflow-hidden h-full flex flex-col rounded-xl">
+                  <div className="bg-gray-200 h-48 w-full rounded-t-xl"></div>
+                  <div className="p-6 flex-1 flex flex-col">
+                    <div className="mb-3">
+                      <div className="h-6 bg-gray-200 rounded w-20 mb-2"></div>
+                    </div>
+                    <div className="h-6 bg-gray-200 rounded w-3/4 mb-3"></div>
+                    <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                    <div className="h-4 bg-gray-200 rounded w-2/3 mb-4"></div>
+                    <div className="mt-auto pt-4 border-t border-gray-200">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-4">
+                          <div className="h-4 bg-gray-200 rounded w-16"></div>
+                          <div className="h-4 bg-gray-200 rounded w-12"></div>
+                        </div>
+                        <div className="h-4 bg-gray-200 rounded w-20"></div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
@@ -150,7 +165,7 @@ function Home() {
               </motion.button>
             </motion.div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
               {posts.slice(0, 6).map((post, index) => (
                 <motion.div
                   key={post.$id}
@@ -158,28 +173,9 @@ function Home() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  className="group"
+                  className="h-full"
                 >
-                  <GlassCard
-                    className="h-full bg-white/80 hover:bg-white/90 border-gray-200/50"
-                    hover={true}
-                  >
-                    <PostCard {...post} />
-                    <div className="p-4 pt-0">
-                      <div className="flex items-center justify-between text-sm text-gray-500">
-                        <div className="flex items-center space-x-4">
-                          <span className="flex items-center">
-                            <ClockIcon className="w-4 h-4 mr-1" />
-                            5 min read
-                          </span>
-                          <span className="flex items-center">
-                            <EyeIcon className="w-4 h-4 mr-1" />
-                            {Math.floor(Math.random() * 1000) + 100}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </GlassCard>
+                  <PostCard {...post} />
                 </motion.div>
               ))}
             </div>
