@@ -72,7 +72,7 @@ function Footer() {
               {/* Contact Info */}
               <div className="space-y-3">
                 <div className="flex items-center text-gray-500">
-                  <span className="text-sm font-medium tracking-wide">hello@wavelink.com</span>
+                  <span className="text-sm font-medium tracking-wide">wavelink.nitishh.in</span>
                 </div>
                 <div className="flex items-center text-gray-500">
 Haryana, India
