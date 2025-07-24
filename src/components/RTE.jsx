@@ -4,6 +4,9 @@ import { Controller } from "react-hook-form";
 import conf from "../conf/conf";
 
 export default function RTE({ name, control, label, defaultValue = "" }) {
+  // Debug: Log API key to verify it's loading
+  console.log('TinyMCE API Key:', conf.tinymceAPI ? 'Loaded' : 'Missing');
+
   return (
     <div className="w-full">
       {label && (
@@ -16,7 +19,7 @@ export default function RTE({ name, control, label, defaultValue = "" }) {
         control={control}
         render={({ field: { onChange } }) => (
           <Editor
-            apiKey={conf.tinymceAPI}
+            apiKey={conf.tinymceAPI || 'ajvrno3yi5mbzkwc77hzt9i2qjtroulzdk02slay0a5e8uff'}
             initialValue={defaultValue}
             init={{
               height: 500,
