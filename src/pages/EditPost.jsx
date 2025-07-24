@@ -39,26 +39,27 @@ function EditPost() {
 
   return post ? (
     <div className="min-h-screen bg-white">
-      <div className="py-16">
+      <div className="py-8 md:py-16">
         <Container>
-          <div className="relative">
-            {/* Back Button */}
+          {/* Back Button - Mobile Responsive */}
+          <div className="mb-6 md:mb-0">
             <motion.button
               onClick={() => navigate(-1)}
-              className="absolute top-8 left-8 p-3 border-2 border-gray-200 rounded-full text-gray-600 hover:border-orange-500 hover:text-orange-500 transition-colors z-10"
+              className="inline-flex items-center gap-2 p-2 md:p-3 border-2 border-gray-200 rounded-full text-gray-600 hover:border-orange-500 hover:text-orange-500 transition-colors"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <ArrowLeftIcon className="w-6 h-6" />
+              <ArrowLeftIcon className="w-5 h-5 md:w-6 md:h-6" />
+              <span className="text-sm font-medium md:hidden">Back</span>
             </motion.button>
           </div>
 
           {/* Header */}
-          <div className="text-center mb-12">
+          <div className="text-center mb-8 md:mb-12">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-4xl md:text-5xl lg:text-6xl font-black text-black mb-4 tracking-tight"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-black mb-3 md:mb-4 tracking-tight leading-tight"
             >
               EDIT STORY
             </motion.h1>
@@ -66,7 +67,7 @@ function EditPost() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-gray-600 font-medium tracking-wide"
+              className="text-sm sm:text-base text-gray-600 font-medium tracking-wide px-4 md:px-0"
             >
               UPDATE YOUR AMAZING STORY
             </motion.p>
@@ -77,7 +78,7 @@ function EditPost() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm"
+            className="bg-white border border-gray-200 rounded-2xl p-4 md:p-8 shadow-sm"
           >
             <PostForm post={post} />
           </motion.div>
