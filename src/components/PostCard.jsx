@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 import {
   ClockIcon,
   EyeIcon,
-  HeartIcon,
   BookmarkIcon,
   ArrowRightIcon
 } from "@heroicons/react/24/outline";
@@ -12,16 +12,14 @@ import appwriteService from "../appwrite/config";
 import {
   calculateReadingTime,
   getViewCount,
-  getLikeCount,
   formatCategory,
   getPreviewText
 } from "../utils/postUtils";
 
-function PostCard({ $id, title, featuredImage, content, userId, category }) {
+function PostCard({ $id, title, featuredImage, content, category }) {
   // Calculate real reading time and get real stats
   const readTime = calculateReadingTime(content);
   const views = getViewCount($id);
-  const likes = getLikeCount($id);
   const preview = getPreviewText(content);
 
   // State for image loading
@@ -36,20 +34,7 @@ function PostCard({ $id, title, featuredImage, content, userId, category }) {
     featuredImage !== 'undefined';
 
   // Get image URL - only if featuredImage exists and is not empty
-  const imageUrl = hasValidImageId ? appwriteService.getFilePreview(featuredImage) : null;
-
-  // Debug logging for image URL (only for first few posts to avoid spam)
-  if (hasValidImageId && imageUrl && Math.random() < 0.2) {
-    console.log(`🖼️ PostCard Debug "${title?.substring(0, 30)}...":`, {
-      featuredImage,
-      imageUrl,
-      testUrl: `🌐 Test this URL manually: ${imageUrl}`
-    });
-
-    // Also test alternative view URL
-    const viewUrl = appwriteService.getFileView(featuredImage);
-    console.log(`📄 Alternative view URL: ${viewUrl}`);
-  }
+  const imageUrl = hasValidImageId ? appwriteService.getFileView(featuredImage) : null;
 
   // If no featuredImage or empty string, treat as no image
   const hasValidImage = !!(hasValidImageId && imageUrl);
@@ -79,19 +64,8 @@ function PostCard({ $id, title, featuredImage, content, userId, category }) {
                   }`}
                   whileHover={{ scale: imageLoaded && !imageError ? 1.05 : 1 }}
                   transition={{ duration: 0.3 }}
-                  onLoad={() => {
-                    console.log(`✅ Image loaded successfully for "${title?.substring(0, 30)}..."`);
-                    setImageLoaded(true);
-                  }}
-                  onError={(e) => {
-                    console.error(`❌ Image failed to load for "${title?.substring(0, 30)}...":`, {
-                      imageUrl,
-                      featuredImage,
-                      error: e.target.src,
-                      errorType: 'Image load failed'
-                    });
-                    setImageError(true);
-                  }}
+                  onLoad={() => setImageLoaded(true)}
+                  onError={() => setImageError(true)}
                 />
 
                 {/* Loading state overlay */}
@@ -170,5 +144,13 @@ function PostCard({ $id, title, featuredImage, content, userId, category }) {
     </motion.div>
   );
 }
+
+PostCard.propTypes = {
+  $id: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  featuredImage: PropTypes.string,
+  content: PropTypes.string.isRequired,
+  category: PropTypes.string,
+};
 
 export default PostCard;

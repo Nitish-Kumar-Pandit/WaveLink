@@ -1,7 +1,8 @@
-import React from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { Controller } from "react-hook-form";
+import PropTypes from "prop-types";
 import conf from "../conf/conf";
+import appwriteService from "../appwrite/config";
 
 export default function RTE({ name, control, label, defaultValue = "" }) {
   // Debug: Log API key to verify it's loading
@@ -240,43 +241,31 @@ export default function RTE({ name, control, label, defaultValue = "" }) {
               // Touch-friendly settings
               toolbar_sticky_offset: 0,
 
+              file_picker_callback: (cb) => {
+                const input = document.createElement("input");
+                input.setAttribute("type", "file");
+                input.setAttribute("accept", "image/*");
+
+                input.onchange = async () => {
+                  const file = input.files[0];
+                  
+                  (async () => {
+                    try {
+                      const uploadedFile = await appwriteService.uploadFile(file);
+                      if (uploadedFile) {
+                        const fileUrl = appwriteService.getFileView(uploadedFile.$id);
+                        cb(fileUrl, { title: file.name });
+                      }
+                    } catch (error) {
+                      console.error("Error uploading file:", error);
+                    }
+                  })();
+                };
+                input.click();
+              },
+
               // Setup function for custom buttons and functionality
               setup: function(editor) {
-                // Add custom file upload button
-                editor.ui.registry.addButton('insertfile', {
-                  text: 'File',
-                  icon: 'upload',
-                  tooltip: 'Insert file',
-                  onAction: function () {
-                    const input = document.createElement('input');
-                    input.setAttribute('type', 'file');
-                    input.setAttribute('accept', '*/*');
-
-                    input.onchange = function() {
-                      const file = this.files[0];
-                      if (file) {
-                        const reader = new FileReader();
-                        reader.onload = function() {
-                          // Insert file based on type
-                          if (file.type.startsWith('image/')) {
-                            editor.insertContent(`<img src="${reader.result}" alt="${file.name}" style="max-width: 100%; height: auto;" />`);
-                          } else if (file.type.startsWith('video/')) {
-                            editor.insertContent(`<video controls style="max-width: 100%;"><source src="${reader.result}" type="${file.type}">Your browser does not support the video tag.</video>`);
-                          } else if (file.type.startsWith('audio/')) {
-                            editor.insertContent(`<audio controls><source src="${reader.result}" type="${file.type}">Your browser does not support the audio tag.</audio>`);
-                          } else {
-                            // For other files, create a download link
-                            editor.insertContent(`<a href="${reader.result}" download="${file.name}" style="display: inline-block; padding: 8px 12px; background: #f0f0f0; border: 1px solid #ccc; border-radius: 4px; text-decoration: none; color: #333; margin: 4px;">📎 ${file.name}</a>`);
-                          }
-                        };
-                        reader.readAsDataURL(file);
-                      }
-                    };
-
-                    input.click();
-                  }
-                });
-
                 editor.on('init', function() {
                   const container = editor.getContainer();
                   const toolbar = container.querySelector('.tox-toolbar');
@@ -321,3 +310,10 @@ export default function RTE({ name, control, label, defaultValue = "" }) {
     </div>
   );
 }
+
+RTE.propTypes = {
+  name: PropTypes.string,
+  control: PropTypes.object.isRequired,
+  label: PropTypes.string,
+  defaultValue: PropTypes.string,
+};

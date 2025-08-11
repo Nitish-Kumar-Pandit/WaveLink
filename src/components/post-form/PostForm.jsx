@@ -1,8 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button, Input, RTE } from "..";
+import PropTypes from "prop-types";
 import appwriteService from "../../appwrite/config";
-import authService from "../../appwrite/auth";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { ToastContainer, useToast } from "../Toast";
@@ -38,24 +38,45 @@ export default function PostForm({ post }) {
   const navigate = useNavigate();
   const userData = useSelector((state) => state.auth.userData);
 
+  const slugTransform = useCallback((value) => {
+    if (!value) return "";
+
+    let slug = value
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-zA-Z0-9\s-_.]/g, "") // Only allow valid characters
+      .replace(/\s+/g, "-") // Replace spaces with hyphens
+      .replace(/-+/g, "-") // Replace multiple hyphens with single hyphen
+      .replace(/^[-_.]+|[-_.]+$/g, ""); // Remove leading/trailing special chars
+
+    // Ensure slug doesn't start with special character
+    if (slug.match(/^[^a-zA-Z0-9]/)) {
+      slug = "post-" + slug;
+    }
+
+    // Limit to 36 characters maximum
+    if (slug.length > 36) {
+      slug = slug.substring(0, 36).replace(/[-_.]+$/, "");
+    }
+
+    // Ensure we have a valid slug
+    if (!slug || slug.length === 0) {
+      slug = "post-" + Date.now().toString().slice(-8);
+    }
+
+    return slug;
+  }, []);
+
   // Check user session on component mount
   useEffect(() => {
-    const checkUserSession = async () => {
-      try {
-        const currentUser = await authService.getCurrentUser();
-        console.log("Current user session:", currentUser);
-        if (!currentUser) {
-          console.warn("No active user session found");
-        }
-      } catch (error) {
-        console.error("Error checking user session:", error);
+    const subscription = watch((value, { name }) => {
+      if (name === "title") {
+        setValue("slug", slugTransform(value.title), { shouldValidate: true });
       }
-    };
+    });
 
-    if (userData?.$id) {
-      checkUserSession();
-    }
-  }, [userData]);
+    return () => subscription.unsubscribe();
+  }, [watch, slugTransform, setValue]);
 
   const submit = async (data) => {
     if (!userData?.$id) {
@@ -86,26 +107,17 @@ export default function PostForm({ post }) {
       return;
     }
 
-    // Clean and validate content
-    let cleanContent = data.content;
-
-    // Remove base64 images from content (they make content too long)
-    cleanContent = cleanContent.replace(/<img[^>]*src="data:image\/[^"]*"[^>]*>/gi, '');
-
-    // Remove any remaining data URLs
-    cleanContent = cleanContent.replace(/data:image\/[^;]*;base64,[^"'\s>]*/gi, '');
-
-    // Validate content length (Appwrite limit is 65535 characters)
-    if (cleanContent.length > 65000) {
-      addToast("Content is too long. Please reduce the content size (maximum ~65,000 characters).", "error");
+    // Validate content length (Appwrite limit is 100000 characters)
+    if (data.content.length > 100000) {
+      addToast("Content is too long. Please reduce the content size (maximum ~100,000 characters).", "error");
       return;
     }
 
-    // Update data with cleaned content
-    data.content = cleanContent;
-
-    console.log("User data:", userData);
-    console.log("Submitting post with data:", data);
+    // Check for base64 images in content
+    if (data.content.includes("data:image")) {
+      addToast("Pasting images directly into the editor is not supported. Please use the 'Featured Image' upload field.", "error");
+      return;
+    }
 
     setIsSubmitting(true);
 
@@ -117,16 +129,17 @@ export default function PostForm({ post }) {
 
       if (post) {
         // Updating existing post
-        if (file) appwriteService.deleteFile(post.featuredImage);
-
+        const newFeaturedImage = file ? file.$id : post.featuredImage;
         const dbPost = await appwriteService.updatePost(post.$id, {
           ...data,
-          featuredImage: file?.$id || post.featuredImage,
+          featuredImage: newFeaturedImage,
         });
 
         if (dbPost) {
+          if (file) {
+            appwriteService.deleteFile(post.featuredImage);
+          }
           addToast("Story updated successfully!", "success");
-          // Small delay to show the toast before redirecting
           setTimeout(() => {
             window.scrollTo(0, 0);
             navigate('/all-posts');
@@ -134,11 +147,15 @@ export default function PostForm({ post }) {
         }
       } else {
         // Creating new post
-        const dbPost = await appwriteService.createPost({
-          ...data,
+        const postData = {
+          title: data.title,
+          slug: data.slug,
+          content: data.content,
+          status: data.status,
           userId: userData.$id,
-          featuredImage: file?.$id, // Featured image is now required for new posts
-        });
+          featuredImage: file ? file.$id : undefined,
+        };
+        const dbPost = await appwriteService.createPost(postData);
 
         if (dbPost) {
           addToast("Story created successfully!", "success");
@@ -184,35 +201,6 @@ export default function PostForm({ post }) {
     }
   };
 
-  const slugTransform = useCallback((value) => {
-    if (!value) return "";
-
-    let slug = value
-      .trim()
-      .toLowerCase()
-      .replace(/[^a-zA-Z0-9\s-_.]/g, "") // Only allow valid characters
-      .replace(/\s+/g, "-") // Replace spaces with hyphens
-      .replace(/-+/g, "-") // Replace multiple hyphens with single hyphen
-      .replace(/^[-_.]+|[-_.]+$/g, ""); // Remove leading/trailing special chars
-
-    // Ensure slug doesn't start with special character
-    if (slug.match(/^[^a-zA-Z0-9]/)) {
-      slug = "post-" + slug;
-    }
-
-    // Limit to 36 characters maximum
-    if (slug.length > 36) {
-      slug = slug.substring(0, 36).replace(/[-_.]+$/, "");
-    }
-
-    // Ensure we have a valid slug
-    if (!slug || slug.length === 0) {
-      slug = "post-" + Date.now().toString().slice(-8);
-    }
-
-    return slug;
-  }, []);
-
   useEffect(() => {
     const subscription = watch((value, { name }) => {
       if (name === "title") {
@@ -222,17 +210,6 @@ export default function PostForm({ post }) {
 
     return () => subscription.unsubscribe();
   }, [watch, slugTransform, setValue]);
-
-  // Reload the page if userData is not available
-  useEffect(() => {
-    if (!userData?.$id) {
-      const timer = setTimeout(() => {
-        window.location.reload(); // Force reload the page
-      }, 2000); // Reload after 2 seconds
-
-      return () => clearTimeout(timer); // Clear the timer if the component unmounts
-    }
-  }, [userData]);
 
   if (!userData?.$id) {
     return <div className="text-center text-gray-500">Loading...</div>; // Show a loading state if userData is not available
@@ -344,11 +321,22 @@ export default function PostForm({ post }) {
                 </div>
               ) : (
                 post ? "UPDATE STORY" : "CREATE STORY"
-              )}
-            </Button>
-          </div>
-        </div>
-      </form>
-    </>
-  );
+      )}
+    </Button>
+  </div>
+</div>
+</form>
+</>
+);
 }
+
+PostForm.propTypes = {
+  post: PropTypes.shape({
+    $id: PropTypes.string,
+    title: PropTypes.string,
+    content: PropTypes.string,
+    featuredImage: PropTypes.string,
+    status: PropTypes.string,
+    category: PropTypes.string,
+  }),
+};

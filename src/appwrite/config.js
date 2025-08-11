@@ -20,7 +20,7 @@ export class Service {
   }
 
   //slug is used as unique id for all docs
-  async createPost({ title, slug, content, featuredImage, status, userId, category }) {
+  async createPost({ title, slug, content, featuredImage, status, userId }) {
     try {
       // Ensure slug is valid for Appwrite document ID
       let validSlug = slug;
@@ -41,11 +41,10 @@ export class Service {
         validSlug = "post-" + Date.now().toString().slice(-8);
       }
 
-      // Create document data without category field (since it doesn't exist in the database schema)
       const documentData = {
         title,
         content,
-        featuredImage: featuredImage || null, // Handle case where featuredImage might be undefined
+        featuredImage,
         status,
         userId,
       };
@@ -70,7 +69,7 @@ export class Service {
     }
   }
 
-  async updatePost(slug, { title, content, featuredImage, status, category }) {
+  async updatePost(slug, { title, content, featuredImage, status }) {
     try {
       // Create document data without category field (since it doesn't exist in the database schema)
       const documentData = {

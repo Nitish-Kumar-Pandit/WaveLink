@@ -1,7 +1,9 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import Logo from "../Logo";
+import LogoutBtn from "../Header/LogoutBtn";
 import {
   HeartIcon,
   EnvelopeIcon,
@@ -10,6 +12,7 @@ import {
 } from "@heroicons/react/24/outline";
 
 function Footer() {
+  const authStatus = useSelector((state) => state.auth.status);
   const currentYear = new Date().getFullYear();
 
   const footerLinks = {
@@ -124,7 +127,7 @@ Haryana, India
                     {link.name}
                   </Link>
                 </li>
-              ))}
+              ))}              
             </ul>
           </motion.div>
 
@@ -177,7 +180,11 @@ Haryana, India
       {/* Footer Bottom */}
       <div className="border-t  border-gray-200 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col md:flex-row items-center justify-center">
+          <div
+            className={`flex flex-col md:flex-row items-center ${
+              authStatus ? "justify-between" : "justify-center"
+            }`}
+          >
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
@@ -188,6 +195,7 @@ Haryana, India
               <HeartIcon className="w-4 h-4 mx-1 text-orange-500" />
               <span className="text-sm font-medium tracking-wide">from India</span>
             </motion.div>
+            {authStatus && <LogoutBtn />}
           </div>
         </div>
       </div>

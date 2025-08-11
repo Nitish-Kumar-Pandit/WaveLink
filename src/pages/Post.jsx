@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import appwriteService from "../appwrite/config";
@@ -301,7 +301,7 @@ export default function Post() {
                 className="mb-12"
               >
                 <img
-                  src={appwriteService.getFilePreview(post.featuredImage)}
+                  src={appwriteService.getFileView(post.featuredImage)}
                   alt={post.title}
                   className="w-full h-96 object-cover rounded-2xl border border-gray-200"
                   onError={(e) => {
@@ -359,7 +359,32 @@ export default function Post() {
                 }}
               >
                 <div className="post-content">
-                  {parse(post.content)}
+                  {parse(post.content, {
+                    replace: (domNode) => {
+                      if (domNode.name === "img") {
+                        const { src, alt } = domNode.attribs;
+                        let fileId;
+                        if (src.includes("/files/")) {
+                          const parts = src.split("/files/");
+                          if (parts.length > 1) {
+                            fileId = parts[1].split("/")[0];
+                          }
+                        } else {
+                          fileId = src;
+                        }
+                        
+                        if (fileId) {
+                          return (
+                            <img
+                              src={appwriteService.getFileView(fileId)}
+                              alt={alt}
+                              className="w-full h-auto object-cover rounded-2xl border border-gray-200"
+                            />
+                          );
+                        }
+                      }
+                    },
+                  })}
                 </div>
               </motion.div>
 
@@ -370,8 +395,8 @@ export default function Post() {
                 transition={{ duration: 0.6, delay: 0.4 }}
                 className="mt-12 pt-8 border-t border-gray-200"
               >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-6">
+                <div className="flex flex-wrap items-center justify-center md:justify-between gap-4">
+                  <div className="flex items-center space-x-4">
                     <motion.button
                       onClick={() => {
                         const newLikedState = !liked;
@@ -381,7 +406,7 @@ export default function Post() {
                         localStorage.setItem(`post_likes_${post.$id}`, newLikeCount.toString());
                         localStorage.setItem(`user_liked_${post.$id}`, newLikedState.toString());
                       }}
-                      className={`flex items-center space-x-2 px-6 py-3 border-2 rounded-full font-semibold text-sm tracking-wide transition-colors ${
+                      className={`flex items-center space-x-2 px-4 py-2 md:px-6 md:py-3 border-2 rounded-full font-semibold text-xs md:text-sm tracking-wide transition-colors ${
                         liked
                           ? 'border-orange-500 bg-orange-500 text-white'
                           : 'border-gray-200 text-gray-600 hover:border-orange-500 hover:text-orange-500'
@@ -390,16 +415,16 @@ export default function Post() {
                       whileTap={{ scale: 0.95 }}
                     >
                       {liked ? (
-                        <HeartIconSolid className="w-5 h-5" />
+                        <HeartIconSolid className="w-4 h-4 md:w-5 md:h-5" />
                       ) : (
-                        <HeartIcon className="w-5 h-5" />
+                        <HeartIcon className="w-4 h-4 md:w-5 md:h-5" />
                       )}
-                      <span>{likeCount} LIKES</span>
+                      <span className="text-xs md:text-sm">{likeCount} LIKES</span>
                     </motion.button>
 
                     <motion.button
                       onClick={() => setBookmarked(!bookmarked)}
-                      className={`flex items-center space-x-2 px-6 py-3 border-2 rounded-full font-semibold text-sm tracking-wide transition-colors ${
+                      className={`flex items-center space-x-2 px-4 py-2 md:px-6 md:py-3 border-2 rounded-full font-semibold text-xs md:text-sm tracking-wide transition-colors ${
                         bookmarked
                           ? 'border-orange-500 bg-orange-500 text-white'
                           : 'border-gray-200 text-gray-600 hover:border-orange-500 hover:text-orange-500'
@@ -408,25 +433,25 @@ export default function Post() {
                       whileTap={{ scale: 0.95 }}
                     >
                       {bookmarked ? (
-                        <BookmarkIconSolid className="w-5 h-5" />
+                        <BookmarkIconSolid className="w-4 h-4 md:w-5 md:h-5" />
                       ) : (
-                        <BookmarkIcon className="w-5 h-5" />
+                        <BookmarkIcon className="w-4 h-4 md:w-5 md:h-5" />
                       )}
-                      <span>{bookmarked ? 'SAVED' : 'SAVE'}</span>
+                      <span className="text-xs md:text-sm">{bookmarked ? 'SAVED' : 'SAVE'}</span>
                     </motion.button>
 
                     <motion.button
                       onClick={handleShare}
-                      className="flex items-center space-x-2 px-6 py-3 border-2 border-gray-200 text-gray-600 hover:border-orange-500 hover:text-orange-500 rounded-full font-semibold text-sm tracking-wide transition-colors"
+                      className="flex items-center space-x-2 px-4 py-2 md:px-6 md:py-3 border-2 border-gray-200 text-gray-600 hover:border-orange-500 hover:text-orange-500 rounded-full font-semibold text-xs md:text-sm tracking-wide transition-colors"
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
-                      <ShareIcon className="w-5 h-5" />
-                      <span>SHARE</span>
+                      <ShareIcon className="w-4 h-4 md:w-5 md:h-5" />
+                      <span className="text-xs md:text-sm">SHARE</span>
                     </motion.button>
                   </div>
 
-                  <div className="text-sm text-gray-500 font-medium tracking-wide">
+                  <div className="text-xs md:text-sm text-gray-500 font-medium tracking-wide text-center md:text-right mt-4 md:mt-0">
                     PUBLISHED {formatDate(post.$createdAt, {
                       year: 'numeric',
                       month: 'long',
