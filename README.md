@@ -1,10 +1,10 @@
 # WaveLink - Modern Blog Platform 🌊
 
-A modern, responsive blog platform built with React, Vite, and Appwrite. Features a clean design inspired by Discord's UI with glassmorphism effects and smooth animations.
+A modern, responsive blog platform built with React, Vite, and Appwrite. Features a clean design.
 
 ## 🚀 Features
 
-- **Modern UI/UX**: Discord-inspired dark theme with glassmorphism effects
+- **Modern UI/UX**: Created a smooth User interface and experience
 - **Authentication**: Secure user registration and login with Appwrite
 - **Blog Management**: Create, edit, delete, and manage blog posts
 - **Rich Text Editor**: TinyMCE integration for rich content creation
